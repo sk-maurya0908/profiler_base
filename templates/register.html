@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <header>
+        <h1>register</h1>
+    </header>
+            
+    <form action="/register" method="POST">
+        <label for="username">set username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Set password:</label>
+        <input type="password"  id="setpassword" name="setpassword" required><br><br>
+
+        <label for="password">Retype Password:</label>
+        <input type="password"  id="retypepassword" name="retypepassword" required><br><br>
+
+        <input type="submit" value="register">
+    </form>
+    {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+    {% endif %}
+</body>
+</html>
