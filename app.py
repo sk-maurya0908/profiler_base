@@ -8,7 +8,7 @@ user_creds={'admin':'admin'}        #users creds. currently stored in dict.
 
 ######### method for basic details
 @app.route('/basic_details',methods=['GET','POST'])
-def basicd_etails():
+def basic_details():
     error=None
     if request.method == 'POST':
         name=request.form['name']
@@ -38,7 +38,7 @@ def login():
         else:
             # Store the user's username in the session
             session['username'] = uname
-            return render_template('filldetail.html',error="none")
+            return render_template('basic_details.html',error="none")
     return render_template('login.html',error=error)
 
 
