@@ -11,30 +11,85 @@ DB_USER = "profiler"
 DB_PASSWORD = "profiler"
 DB_HOST = "localhost"
 
+######### method to get the db connection obj
 def connect_to_db():
     return psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
-
-#user_creds={'admin':'admin'}        #users creds. currently stored in dict.
 
 ######### method for basic details
 @app.route('/basic_details',methods=['GET','POST'])
 def basic_details():
     error=None
     if request.method == 'POST':
+        # connecting to database
+        connection=connect_to_db()
+        cursor=connection.cursor()
+
+        # get the current username 
+        username=session['username']
+
+        # get details from the html form
         name=request.form['name']
         roll=request.form['roll']
         department=request.form['department']
         program=request.form['program']
         year=request.form['year']
 
-        print(name,roll,department,program,year)
-    return 'nicely done basicd_etails'
+        # prepare data to be inserted into the table
+        data=name+"#"+roll+"#"+department+"#"+program+"#"+year
+        query=f"INSERT INTO usersdata(username,basicDetails) VALUES('{username}','{data}') ON CONFLICT (username) DO UPDATE SET basicDetails='{data}'"
+
+        # insert and commit the changes in the database
+        cursor.execute(query)
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return render_template('edu_details.html',error="none")
+
+    return render_template('basic_details.html',error=error)
 
 
 ######### method for educational details
 @app.route('/edu_details',methods=['GET','POST'])
 def edu_details():
-    return 'nicely done edu_details'
+    error=None
+    if request.method == 'POST':
+        # connecting to database
+        connection=connect_to_db()
+        cursor=connection.cursor()
+
+        # get the current username 
+        username=session['username']
+
+        # get details from the html form
+        highschool_name=request.form['highschool_name']
+        highschool_start_year =request.form['highschool_start_year']
+        highschool_finish_year=request.form['highschool_finish_year']
+        highschool_percentage =request.form['highschool_percentage']
+        seniorsecondary_name  =request.form['seniorsecondary_name']
+        seniorsecondary_start_year=request.form['seniorsecondary_start_year']
+        seniorsecondary_finish_year=request.form['seniorsecondary_finish_year']
+        seniorsecondary_percentage=request.form['seniorsecondary_percentage']
+        higher_education_name=request.form['higher_education_name']
+        higher_education_program=request.form['higher_education_program']
+        higher_education_start_year=request.form['higher_education_start_year']
+        higher_education_finish_year=request.form['higher_education_finish_year']
+        higher_education_department=request.form['higher_education_department']
+        higher_education_percentage=request.form['higher_education_percentage']
+
+        # prepare data to be inserted into the table
+        data="#"+highschool_name+"#"+highschool_start_year+"#"+highschool_finish_year+"#"+highschool_percentage+"#"+seniorsecondary_name+"#"+seniorsecondary_start_year+"#"+seniorsecondary_finish_year+"#"+seniorsecondary_percentage
+        data1=data+"#"+higher_education_name+"#"+higher_education_program+"#"+higher_education_start_year+"#"+higher_education_finish_year+"#"+higher_education_department+"#"+higher_education_percentage
+        query=f"UPDATE usersdata SET eduDetails='{data1}' WHERE username='{username}'"
+
+        # insert and commit the changes in the database
+        cursor.execute(query)
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return "educational details added."
+
+    return render_template('edu_details.html',error="none")
 
 
 ######### method to handle secure logins
@@ -47,7 +102,8 @@ def login():
 
         conn = connect_to_db()  #connecting to DB
         cur = conn.cursor()
-        cur.execute(f"SELECT id FROM users WHERE username = '{uname}' AND password = '{upassword}'")
+        query=f"SELECT id FROM users WHERE username = '{uname}' AND password = '{upassword}'"
+        cur.execute(query)
         user_id = cur.fetchone()   #fetching the query results
         conn.close() #closing the connection
 

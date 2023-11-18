@@ -1,64 +1,309 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Educational Details Form</title>
-</head>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style></head>
 <body>
-    <h2>Educational Details Form</h2>
-    <form action="/edu_details" method="post">
-        <fieldset>
-            <legend>High School (10th)</legend>
-            <label for="highschool_name">School Name:</label>
-            <input type="text" id="highschool_name" name="highschool_name" required><br><br>
 
-            <label for="highschool_start_year">Year of Start:</label>
-            <input type="number" id="highschool_start_year" name="highschool_start_year" required><br><br>
+<!-- <form action="/edu_details" method="post"> -->
+    
+<h3>EDUCATION</h3>
+    <table id="eduDetailsTable" name="eduDetailsTable">
+        <thead>
+            <tr>
+                <th>Examination</th>
+                <th>University </th>
+                <th>Institute  </th>
+                <th>Start Year </th>
+                <th>Finish Year</th>
+                <th>Percentage </th>
+            </tr>
+        </thead>
+        
+        <tbody id="eduDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addEduDetails()">Add Details</button>
+    <br>
+<h3>WORK EXPERIENCE</h3>
+    <table id="workExperienceDetailsTable" name="workExperienceDetailsTable">
+        <thead>
+            <tr>
+                <th>Designation</th>
+                <th>Organisation</th>
+                <th>Roles & Responsibilities</th>
+                <th>Project</th>
+                <th>Responsibilities in project</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="workExperienceDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addWorkDetails()">Add Details</button>
+    <br>
+<h3>M.TECH THESIS & SEMINAR</h3>
+    <table id="masterThesisDetailsTable" name="masterThesisDetailsTable">
+        <thead>
+            <tr>
+                <th>Project/Seminar Title</th>
+                <th>Project/Seminar</th>
+                <th>Description</th>
+                <th>Guide</th>
+                <th>Current work</th>
+                <th>Future work</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="masterThesisDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addMasterThesisDetails()">Add Details</button>
+    <br>
+<h3>COURSE PROJECTS</h3>
+    <table id="courseProjectsDetailsTable" name="courseProjectsDetailsTable">
+        <thead>
+            <tr>
+                <th>Project Title</th>
+                <th>Course name and code</th>
+                <th>Guide</th>
+                <th>Description</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="courseProjectsDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addCourseProjectDetails()">Add Details</button>
+    <br>
+<h3>CERTIFICATIONS</h3>
+    <table id="certificationsDetailsTable" name="certificationsDetailsTable">
+        <thead>
+            <tr>
+                <th>Certification Title</th>
+                <th>Offered by</th>
+                <th>Platform</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="certificationsDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addCertificationsDetails()">Add Details</button>
+    <br>
+<h3>ACHIEVEMENTS</h3>
+    <table id="achievementsDetailsTable" name="achievementsDetailsTable">
+        <thead>
+            <tr>
+                <th>Achievements</th>
+            </tr>
+        </thead>
+        
+        <tbody id="achievementsDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addAchievementsDetails()">Add Details</button>
+    <br>
+<h3>TECHNICAL SKILLS</h3>
+    <table id="technicalSkillsDetailsTable" name="technicalSkillsDetailsTable">
+        <thead>
+            <tr>
+                <th>Your Technical Skills</th>
+            </tr>
+        </thead>
+        
+        <tbody id="technicalSkillsDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addTechnicalSkillsDetails()">Add Details</button>
+    <br>
+<h3>EXTRA-CURRICULARS</h3>
+    <table id="extraCurricularsDetailsTable" name="extraCurricularsDetailsTable">
+        <thead>
+            <tr>
+                <th>Your Extra Curriculars</th>
+            </tr>
+        </thead>
+        
+        <tbody id="technicalSkillsDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addExtraCurricularsDetails()">Add Details</button>
+    <br>
+<h3>HOBBIES</h3>
+    <table id="hobbiesDetailsTable" name="hobbiesDetailsTable">
+        <thead>
+            <tr>
+                <th>Your Hobbies</th>
+            </tr>
+        </thead>
+        
+        <tbody id="hobbiesDetailsBody">
+        </tbody>
+    </table>
+    <button onclick="addHobbiesDetails()">Add Details</button>
+    <br>
 
-            <label for="highschool_finish_year">Year of Finish:</label>
-            <input type="number" id="highschool_finish_year" name="highschool_finish_year" required><br><br>
+<!-- </form> -->
 
-            <label for="highschool_percentage">Percentage/CGPA:</label>
-            <input type="text" id="highschool_percentage" name="highschool_percentage" required><br><br>
-        </fieldset>
+   
+    <script>
 
-        <fieldset>
-            <legend>Senior Secondary</legend>
-            <label for="seniorsecondary_name">School Name:</label>
-            <input type="text" id="seniorsecondary_name" name="seniorsecondary_name" required><br><br>
+        let eduCount = 0;
+        function addEduDetails() {
+            eduCount++;
+            const tableBody = document.getElementById('eduDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
 
-            <label for="seniorsecondary_start_year">Year of Start:</label>
-            <input type="number" id="seniorsecondary_start_year" name="seniorsecondary_start_year" required><br><br>
+            // eduDetails
+        }
 
-            <label for="seniorsecondary_finish_year">Year of Finish:</label>
-            <input type="number" id="seniorsecondary_finish_year" name="seniorsecondary_finish_year" required><br><br>
+        let workExperienceCount =0;
+        function addWorkDetails(){
+            addWorkCount++;
+            const tableBody = document.getElementById('workDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
 
-            <label for="seniorsecondary_percentage">Percentage/CGPA:</label>
-            <input type="text" id="seniorsecondary_percentage" name="seniorsecondary_percentage" required><br><br>
-        </fieldset>
+            // workDetails
+        }
+        let masterThesisCount =0;
+        function addMasterThesisDetails(){
+            addMasterThesisCount++;
+            const tableBody = document.getElementById('masterThesisDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
 
-        <fieldset>
-            <legend>Higher Education</legend>
-            <label for="higher_education_name">College/University Name:</label>
-            <input type="text" id="higher_education_name" name="higher_education_name"><br><br>
+            // masterThesisDetails
+        }
 
-            <label for="higher_education_program">Program:</label>
-            <input type="text" id="higher_education_program" name="higher_education_program"><br><br>
+        let courseProjectsCount =0;
+        function addCourseProjectDetails(){
+            addCourseProjectCount++;
+            const tableBody = document.getElementById('courseProjectDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
 
-            <label for="higher_education_start_year">Year of Start:</label>
-            <input type="number" id="higher_education_start_year" name="higher_education_start_year"><br><br>
+            // courseProjectDetails
+        }
 
-            <label for="higher_education_finish_year">Year of Finish (or still pursuing):</label>
-            <input type="number" id="higher_education_finish_year" name="higher_education_finish_year"><br><br>
+        let certificationsCount =0;
+        function addCertificationsDetails(){
+            addCertificationsCount++;
+            const tableBody = document.getElementById('certificationsDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
 
-            <label for="higher_education_department">Department:</label>
-            <input type="text" id="higher_education_department" name="higher_education_department"><br><br>
+            // certificationsDetails
+        }
 
-            <label for="higher_education_percentage">Percentage/CGPA:</label>
-            <input type="text" id="higher_education_percentage" name="higher_education_percentage"><br><br>
-            
-        </fieldset>
+        let achievementsCount =0;
+        function addAchievementsDetails(){
+            addAchievementsCount++;
+            const tableBody = document.getElementById('achievementsDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
 
-        <input type="submit" value="Next">
-    </form>
+            // achievementsDetails
+        }
+
+        let technicalSkillsCount =0;
+        function addTechnicalSkillsDetails(){
+            addTechnicalSkillsCount++;
+            const tableBody = document.getElementById('technicalSkillsDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
+
+            // technicalSkillsDetails
+        }
+
+        let extraCurricularsCount =0;
+        function addExtraCurricularsDetails(){
+            addExtraCurricularsCount++;
+            const tableBody = document.getElementById('extraCurricularsDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
+
+            // extraCurricularsDetails
+        }
+
+        let hobbiesCount =0;
+        function addHobbiesDetails(){
+            addHobbiesCount++;
+            const tableBody = document.getElementById('hobbiesDetailsBody');
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
+
+            // hobbiesDetails
+        }
+    </script>
+
 </body>
 </html>
