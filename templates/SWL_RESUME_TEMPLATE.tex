@@ -1,12 +1,13 @@
 \documentclass[a4paper,10pt]{article}
 
-\usepackage[top=0.75in, bottom=0.2in, left=0.35in, right=0.35in]{geometry}
+\usepackage[top=0.75in, bottom=0.2in, left=0.55in, right=0.55in]{geometry}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{url}
 \usepackage{enumitem}
 \usepackage{palatino}
 \usepackage{tabularx}
+\usepackage{comment}
 \fontfamily{SansSerif}
 \selectfont
 
@@ -34,7 +35,7 @@
 \newcommand{\resheading}[1]{{\small \colorbox{mygrey}{\begin{minipage}{0.99\textwidth}{\textbf{#1 \vphantom{p\^{E}}}}\end{minipage}}}}
 \newcommand{\ressubheading}[3]{
 \begin{tabular*}{6.62in}{l @{\extracolsep{\fill}} r}
-    \textsc{{\textbf{#1}}} & \textsc{\textit{[#2]}} \\
+	\textsc{{\textbf{#1}}} & \textsc{\textit{[#2]}} \\
 \end{tabular*}\vspace{-8pt}}
 %-----------------------------------------------------------
 
@@ -45,6 +46,8 @@
 
 % Dummy header is written here, just for example  in between the tags:  \iffalse and \fi .. 
 % \iffalse 
+% \vspace*{1.9in}
+
 \begin{table}
     \begin{minipage}{0.15\linewidth}
         \centering
@@ -55,9 +58,9 @@
         \setlength{\tabcolsep}{70pt}
         \def\arraystretch{1.15}
         \begin{tabular}{ll}
-            \textbf{\Large{candidateName}}  &  {rollNo} \\
+            \textbf{\Large{name}}  &  {rollNumber} \\
             \textbf{departmentName} & \textbf{programName} \\
-            currentCollegeName &  {gender}\\
+            Indian Institute of Technology Bombay &  {gender}\\
         \end{tabular}
     \end{minipage}\hfill
 \end{table}    
@@ -69,72 +72,127 @@
 \toprule
 \textbf{Examination}    & \textbf{University}   & \textbf{Institute}    & \textbf{Year}     & \textbf{CPI/\%} \\ 
 \toprule
-% educationalDetailsTable
-examinationDetails & universityDetails & instituteDetails &  yearDetails & cpiDetails\\
-% Post Graduation & pgUniversity  & pgCollegeName  & pgYear  & pgMarks\\ 
-% Graduation      & ugUniversity  & ugCollegeName  & ugYear  & ugMarks\\ 
-% Intermediate/+2 & hscUniversity & hscCollegeName & hscYear & hscMarks\\ 
-% Matriculation   & sscUniversity & sscCollegeName & sscYear & sscMarks\\
+exam & univ & insti & yos & cpi\\
 \bottomrule \\[-0.75cm]
+\begin{comment}
+Post Graduation & IIT Bombay & IIT Bombay & 2021-23 & 8.44\\ 
+Graduation & Mumbai University & TSEC & 2014-18 & 7.85\\ 
+Intermediate/+2 & HSC & Jai Hind College & 2012-14 & 79.08\\     
+\end{comment}
 \end{tabular}
 \end{table}
 % \fi
 
+%---------------------WORK EXPERIENCE STARTS--------------------------------
+\noindent
+\resheading{\textbf{WORK EXPERIENCE}}\\[-0.3cm]
+\begin{itemize}[noitemsep,nolistsep]
+    \item \textbf{designation} | \textbf{\emph{organisation}}\hfill \emph{(fromDate-toDate)}\\[-0.6cm]
+    \begin{itemize}[noitemsep]
+        \item yourRolesAndResponsibilitiesInOrganization\\
+        \textbf{Projects:}
+        \item \textbf{projectName}  
+\begin{itemize}[noitemsep,nolistsep]
+    \item responsibility1InProject
+    \item responsibility2InProject
+\end{itemize}
+
+\end{itemize}
+\end{itemize}
+%---------------------WORK EXPERIENCE ENDS------------------------------
+
+
 \noindent \resheading{\textbf{M.TECH THESIS \& SEMINAR}}\\[-0.3cm]
 \begin{itemize}[noitemsep,nolistsep]
-\item \textbf{thesisTitle} \\
-\emph{(pgProjectName | Guide: \textbf{pgProjectGuideName})} \hfill \emph{(pgProjectYear)}\\
+\item \textbf{projectTitle} \\
+\emph{(M.Tech Project | Guide: \textbf{projectGuide})} \hfill \emph{(projectFromDate-projectToDate)}\\
+mtechProjectDescriptionDetailedVersion\\
+%Change if required
     % \begin{itemize}[noitemsep,nolistsep]
  \textbf{Current work:}\\[-0.5cm]
     \begin{itemize}[noitemsep,nolistsep]
-        \item pgProjectcurrentWorkDescription
+        \item currentWorkDone
     \end{itemize}
 \textbf{Future work:}\\[-0.5cm]
     \begin{itemize}[noitemsep,nolistsep]
-        \item pgProjectfutureWorkDescription
+        \item futureWorkToBeDone
     \end{itemize} 
     % \end{itemize}
 \item \textbf{seminarTitle} \\
-\emph{(pgSeminarName | Guide: \textbf{pgSeminarGuideName})} \hfill \emph{(pgSeminarYear)}
+\emph{(M.Tech Seminar | Guide: \textbf{seminarGuide})} \hfill \emph{(seminarFromDate-seminarToDate)}
     \begin{itemize}[noitemsep,nolistsep]
-    \item pgSeminarDescription
+    \item seminarDescription  
     \end{itemize}
 
 \end{itemize}
-
+%----------------------------COURSE PROJECTS Starts--------------------------
 \noindent
 \resheading{\textbf{COURSE PROJECTS} }\\[-0.3cm]
 \begin{itemize}[noitemsep,nolistsep]
-\item \textbf{CourseProjectTitle}, \emph{(courseProjectCode)}\hfill \emph{(courseProjectYear)} 
+
+
+\item \textbf{courseProjectTitle}\\ \emph{(associatedCourseNameAndCode| Guide: \textbf{courseInstructorName})}
+\hfill \emph{(courseFromDate-courseToDate)}
 \begin{itemize}[noitemsep,nolistsep]
-    \item courseProjectDescription
+    \item courseProjectDescription. 
 \end{itemize}
 
-\end{itemize}
 
+\end{itemize}
+%----------------------------COURSE PROJECTS ENDS--------------------------
+
+
+%---------------------Certification STARTS--------------------------------
+\noindent
+\resheading{\textbf{CERTIFICATIONS}}\\[-0.2cm]
+\begin{itemize}[noitemsep,nolistsep]
+\setlength\itemsep{0.1em}
+    \item \textbf{certificationTitle} by certifcationOfferedBy \emph{(certificationPlatform)}\hfill \emph{(certificationDate)}
+\end{itemize}
+%---------------------Certification ENDS--------------------------------
+
+
+%---------------------AWARDS STARTS--------------------------------
+\noindent
+\resheading{\textbf{ACHIEVEMENTS}}\\[-0.3cm]
+\begin{itemize}[noitemsep,nolistsep]
+    \item achievements
+\end{itemize}
+%---------------------AWARDS ENDS--------------------------------
+
+
+
+%---------------------TECHNICAL SKILLS STARTS--------------------------------
 
 \noindent
 \resheading{\textbf{TECHNICAL SKILLS}}\\[-0.4cm]
  \begin{itemize}
-  \item \textbf{technicalSkillsTitle }: technicalSkillsFields\\[-0.6cm]
- \end{itemize}
-
-
-\noindent
-\resheading{\textbf{WORK EXPERIENCE \& INTERNSHIPS}}\\[-0.3cm]
-\begin{itemize}[noitemsep,nolistsep]
-    \item \textbf{workExpPosition} | \textbf{\emph{workExpCompany}}\hfill \emph{(workExpYear)}\\[-0.6cm]
-    \begin{itemize}[noitemsep]
-        \item workExpDescription
-    \end{itemize}
+ \setlength\itemsep{-0.4em}
+  \item technicalSkills
 \end{itemize}
+%---------------------TECHNICAL SKILLS ENDS--------------------------------
 
+
+%---------------------EXTRA-CURRICULAR STARTS--------------------------------
 \noindent
-\resheading{\textbf{POR \& EXTRA-CURRICULARS}}\\[-0.4cm]
+\resheading{\textbf{EXTRA-CURRICULARS}}\\[-0.4cm]
 \begin{itemize}
 \setlength\itemsep{-0.4em}
-\item \textbf{PorPosition} PorDescription \emph{(PorYear)}
-
+    \item extraCurriculars
 \end{itemize}
+%---------------------EXTRA-CURRICULAR ENDS--------------------------------
 
+
+%---------------------Hobbies STARTS--------------------------------
+
+\noindent
+\resheading{\textbf{HOBBIES}} \\[\lsep] \\[-0.4cm]
+\begin{flushleft}
+    % \begin{tabular}{lll}
+        hobbiesString
+        %\hspace{5mm} Food Tasting,
+    % \end{tabular}
+\end{flushleft}
+
+%---------------------Hobbies ENDS--------------------------------
 \end{document}

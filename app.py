@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from flask import Flask, render_template, redirect, url_for, request, session
 import psycopg2
+from user_management import User
 
 app = Flask(__name__)  
 app.secret_key = 'your_secret_key'  # Replace 'your_secret_key' with a strong, unique secret key
@@ -25,10 +26,10 @@ def basic_details():
         roll=request.form['roll']
         department=request.form['department']
         program=request.form['program']
-        year=request.form['year']
-
-        print(name,roll,department,program,year)
-    return 'nicely done basicd_etails'
+        gender=request.form['gender']
+        user = User(name, roll, department, program, gender, null, null, null)
+        print(user)
+    return 'nicely done basic_details'
 
 
 ######### method for educational details
@@ -64,6 +65,14 @@ def login():
 @app.route('/register',methods=['GET','POST']) 
 def register():
     error=None
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User(email, password)
+        users.append(user)
+        flash('Registration successful! Please log in.')
+        return redirect(url_for('login'))
+    return render_template('register.html')
     if request.method == 'POST':
         conn=connect_to_db()
         cur = conn.cursor()
