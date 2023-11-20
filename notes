@@ -1,3 +1,10 @@
 create a mock object of a user with correct values
 try replaccing it in the template
 generate pdf
+
+
+create table:
+work_experience
+education
+course_projects
+certifications

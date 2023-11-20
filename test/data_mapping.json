@@ -21,7 +21,7 @@
     "courseProjects":["courseProjectsTemplate",""],
     "courseProjects_single":["\\item \\textbf{courseProjectTitle}\\\\ \\emph{(associatedCourseNameAndCode| Guide: \\textbf{courseInstructorName})}    \\hfill \\emph{(courseFromDate-courseToDate)}    \\begin{itemize}[noitemsep,nolistsep]        \\item courseProjectDescription     \\end{itemize}",""],
     "certifications_single":["\\item \\textbf{certificationTitle} by certifcationOfferedBy \\emph{(certificationPlatform)}\\hfill \\emph{(certificationDate)}",""],
-    "certifications":["certificationTemplate",""],
+    "certifications":["certificationsTemplate",""],
     "achievements_single":["\\item achievements",""],
     "achievements":["achievementsTemplate",""],
     "technicalSkills":["technicalSkillsTemplate",""],
@@ -29,5 +29,5 @@
     "extraCurriculars":["extraCurricularsTemplate",""],
     "extraCurriculars_single":["\\item extraCurriculars",""],
     "hobbies":["hobbiesTemplate",""],
-    "hobbies_single":["\\hspace{5mm} hobby",""]
+    "hobbies_single":["\\hspace{5mm} hobbies",""]
 }

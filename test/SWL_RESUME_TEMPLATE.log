@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2023.11.18)  20 NOV 2023 15:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.11.18)  20 NOV 2023 20:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -11,14 +11,14 @@ Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 )
-\c@part=\count181
-\c@section=\count182
-\c@subsection=\count183
-\c@subsubsection=\count184
-\c@paragraph=\count185
-\c@subparagraph=\count186
-\c@figure=\count187
-\c@table=\count188
+\c@part=\count185
+\c@section=\count186
+\c@subsection=\count187
+\c@subsubsection=\count188
+\c@paragraph=\count189
+\c@subparagraph=\count190
+\c@figure=\count191
+\c@table=\count192
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
@@ -36,9 +36,9 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 (/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
-\Gm@cnth=\count189
-\Gm@cntv=\count190
-\c@Gm@tempcnt=\count191
+\Gm@cnth=\count193
+\Gm@cntv=\count194
+\c@Gm@tempcnt=\count195
 \Gm@bindingoffset=\dimen139
 \Gm@wd@mp=\dimen140
 \Gm@odd@mp=\dimen141
@@ -61,10 +61,10 @@ Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: xetex.def on input line 107.
+Package graphics Info: Driver file: pdftex.def on input line 107.
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/xetex.def
-File: xetex.def 2021/03/18 v5.0k Graphics/color driver for xetex
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen147
 \Gin@req@width=\dimen148
@@ -81,12 +81,12 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \cmidrulesep=\dimen156
 \cmidrulekern=\dimen157
 \defaultaddspace=\dimen158
-\@cmidla=\count192
-\@cmidlb=\count193
+\@cmidla=\count196
+\@cmidlb=\count197
 \@aboverulesep=\dimen159
 \@belowrulesep=\dimen160
-\@thisruleclass=\count194
-\@lastruleclass=\count195
+\@thisruleclass=\count198
+\@lastruleclass=\count199
 \@thisrulewidth=\dimen161
 )
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
@@ -99,8 +99,8 @@ Package: enumitem 2019/06/20 v3.9 Customized lists
 \enit@outerparindent=\dimen162
 \enit@toks=\toks18
 \enit@inbox=\box50
-\enit@count@id=\count196
-\enitdp@description=\count197
+\enit@count@id=\count266
+\enitdp@description=\count267
 )
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/palatino.sty
 Package: palatino 2020/03/25 PSNFSS-v9.3 (SPQR) 
@@ -123,20 +123,20 @@ Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
 \TX@old@col=\dimen167
 \TX@target=\dimen168
 \TX@delta=\dimen169
-\TX@cols=\count198
+\TX@cols=\count268
 \TX@ftn=\toks20
 )
 (/usr/share/texlive/texmf-dist/tex/latex/comment/comment.sty
 \CommentStream=\write3
 
 Excluding comment 'comment')
-LaTeX Font Info:    Trying to load font information for TU+SansSerif on input l
-ine 12.
-LaTeX Font Info:    No file TUSansSerif.fd. on input line 12.
+LaTeX Font Info:    Trying to load font information for OT1+SansSerif on input 
+line 12.
+LaTeX Font Info:    No file OT1SansSerif.fd. on input line 12.
 
 
-LaTeX Font Warning: Font shape `TU/SansSerif/m/n' undefined
-(Font)              using `TU/lmr/m/n' instead on input line 12.
+LaTeX Font Warning: Font shape `OT1/SansSerif/m/n' undefined
+(Font)              using `OT1/cmr/m/n' instead on input line 12.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
@@ -150,31 +150,21 @@ File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 Package: inputenc 2021/02/14 v1.3d Input encoding file
 \inpenc@prehook=\toks21
 \inpenc@posthook=\toks22
-
-
-Package inputenc Warning: inputenc package ignored with utf8 based engines.
-
-) (/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2021/12/07 v1.3c Standard LaTeX Color (DPC)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-Package color Info: Driver file: xetex.def on input line 149.
+Package color Info: Driver file: pdftex.def on input line 149.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
-File: l3backend-xetex.def 2022-01-12 L3 backend support: XeTeX
-
-(|extractbb --version)
-\c__kernel_sys_dvipdfmx_version_int=\count199
-\l__color_backend_stack_int=\count266
-\g__color_backend_stack_int=\count267
-\g__graphics_track_int=\count268
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count269
 \l__pdf_internal_box=\box53
-\g__pdf_backend_object_int=\count269
-\g__pdf_backend_annotation_int=\count270
-\g__pdf_backend_link_int=\count271
-) (./SWL_RESUME_TEMPLATE.aux)
+)
+(./SWL_RESUME_TEMPLATE.aux)
 \openout1 = `SWL_RESUME_TEMPLATE.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
@@ -186,14 +176,6 @@ LaTeX Font Info:    ... okay on input line 42.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
 LaTeX Font Info:    ... okay on input line 42.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 4
-2.
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 42.
 LaTeX Font Info:    ... okay on input line 42.
 LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
 LaTeX Font Info:    ... okay on input line 42.
@@ -201,9 +183,9 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
 LaTeX Font Info:    ... okay on input line 42.
 
 *geometry* driver: auto-detecting
-*geometry* detected driver: xetex
+*geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
-* driver: xetex
+* driver: pdftex
 * paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
@@ -234,8 +216,33 @@ LaTeX Font Info:    ... okay on input line 42.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-File: iit_logo.png Graphic file (type bmp)
-<iit_logo.png>
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count270
+\scratchdimen=\dimen170
+\scratchbox=\box54
+\nofMPsegments=\count271
+\nofMParguments=\count272
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count273
+\MPscratchDim=\dimen171
+\MPnumerator=\count274
+\makeMPintoPDFobject=\count275
+\everyMPtoPDFconversion=\toks24
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+<iit_logo.png, id=1, 441.90094pt x 423.83344pt>
+File: iit_logo.png Graphic file (type png)
+<use iit_logo.png>
+Package pdftex.def Info: iit_logo.png  used on input line 54.
+(pdftex.def)             Requested size: 60.27438pt x 57.81621pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 55.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -247,4 +254,36 @@ Overfull \hbox (223.91354pt too wide) in paragraph at lines 60--65
 
 ! Misplaced \noalign.
 \bottomrule ->\noalign 
-         
+                       {\ifnum 0=`}\fi \@aboverulesep =\aboverulesep \global...
+l.77 \bottomrule
+                 \\[-0.75cm]
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.77 \bottomrule \\
+                   [-0.75cm]
+? 
+! Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.77 \bottomrule \\
+                   [-0.75cm]
+? 
+! Emergency stop.
+<inserted text> 
+                \endgroup 
+l.77 \bottomrule \\
+                   [-0.75cm]
+End of file on the terminal!
+
+ 
+Here is how much of TeX's memory you used:
+ 2877 strings out of 480247
+ 46180 string characters out of 5896150
+ 333483 words of memory out of 5000000
+ 20815 multiletter control sequences out of 15000+600000
+ 471870 words of font info for 31 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 55i,11n,62p,217b,299s stack positions out of 5000i,500n,10000p,200000b,80000s
+!  ==> Fatal error occurred, no output PDF file produced!

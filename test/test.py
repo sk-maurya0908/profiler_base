@@ -124,12 +124,16 @@ with open('SWL_RESUME_TEMPLATE.tex') as template_file:
 
 for key, value in mapping.items():
     if key not in resume:
+        print(key)
+        latex_template = latex_template.replace('%'+key+'STARTS','\\begin{comment}\n%')
+        latex_template = latex_template.replace('%'+key+'ENDS','\end{comment}\n%')
         continue
     resData = resume[key]
     texDataToReplace = ''
-    if type(resData) is list:
-        #print("count",len(resData))
-        if bool(resData):
+    if bool(resData):
+        print(resData)
+        print("count",len(resData))
+        if type(resData) is list:
             #print(*resData)
             for obj in resData:
                 #print("obj",type(obj))
@@ -146,8 +150,12 @@ for key, value in mapping.items():
                     #print(temp_single)
                 texDataToReplace += temp_single
             #print("Done list")
+        else:
+            texDataToReplace = escape_special_chars(resData)
     else:
-        texDataToReplace = escape_special_chars(resData)
+        print(key)
+        latex_template = latex_template.replace('%'+key+'STARTS','\\begin{comment}\n%')
+        latex_template = latex_template.replace('%'+key+'ENDS','\end{comment}\n%')
     mapping[key][1] = texDataToReplace
     #print(key, value)
     latex_template = latex_template.replace(value[0], value[1])
