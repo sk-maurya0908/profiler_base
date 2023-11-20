@@ -66,14 +66,6 @@ def login():
 def register():
     error=None
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        user = User(email, password)
-        users.append(user)
-        flash('Registration successful! Please log in.')
-        return redirect(url_for('login'))
-    return render_template('register.html')
-    if request.method == 'POST':
         conn=connect_to_db()
         cur = conn.cursor()
         #username and password from the form

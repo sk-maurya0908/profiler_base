@@ -7,8 +7,8 @@ class User:
         self.resume = {
             'name': '',
             'rollNumber': '',
-            'department': '',
-            'program': '',
+            'departmentName': '',
+            'programName': '',
             'gender': '',
             'education': [],
             'work_experience': [],
@@ -23,13 +23,20 @@ class User:
         self.resume['gender'] = gender
         self.resume['education'] = education.split('\n')
         self.resume['work_experience'] = work_experience.split('\n')
-        self.resume['skills'] = skills.split('\n')
+        self.resume['technical_skills'] = skills.split('\n')
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def genResume(uname):
-        details = getStudentDetails(uname)
+    def generate_latex_resume(self, template_path, mapping_path):
+        with open(mapping_path) as mapping_file:
+            mapping = json.load(mapping_file)
 
-    def getStudentDetails(uname):
-        return null
+        with open(template_path) as template_file:
+            latex_template = template_file.read()
+
+        for field, value in mapping.items():
+            placeholder = f"\\VAR{{{field}}}"
+            latex_template = latex_template.replace(placeholder, value)
+
+        return latex_template
