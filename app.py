@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 import psycopg2
 
 app = Flask(__name__)  
@@ -44,14 +44,14 @@ def basic_details():
         cursor.close()
         connection.close()
 
-        return render_template('edu_details.html',error="none")
+        return render_template('details.html',error="none")
 
     return render_template('basic_details.html',error=error)
 
 
 ######### method for educational details
-@app.route('/edu_details',methods=['GET','POST'])
-def edu_details():
+@app.route('/details',methods=['GET','POST'])
+def details():
     error=None
     if request.method == 'POST':
         # connecting to database
@@ -62,24 +62,10 @@ def edu_details():
         username=session['username']
 
         # get details from the html form
-        highschool_name=request.form['highschool_name']
-        highschool_start_year =request.form['highschool_start_year']
-        highschool_finish_year=request.form['highschool_finish_year']
-        highschool_percentage =request.form['highschool_percentage']
-        seniorsecondary_name  =request.form['seniorsecondary_name']
-        seniorsecondary_start_year=request.form['seniorsecondary_start_year']
-        seniorsecondary_finish_year=request.form['seniorsecondary_finish_year']
-        seniorsecondary_percentage=request.form['seniorsecondary_percentage']
-        higher_education_name=request.form['higher_education_name']
-        higher_education_program=request.form['higher_education_program']
-        higher_education_start_year=request.form['higher_education_start_year']
-        higher_education_finish_year=request.form['higher_education_finish_year']
-        higher_education_department=request.form['higher_education_department']
-        higher_education_percentage=request.form['higher_education_percentage']
-
+        data = request.json
+        print("data recieved: ",data)
         # prepare data to be inserted into the table
-        data="#"+highschool_name+"#"+highschool_start_year+"#"+highschool_finish_year+"#"+highschool_percentage+"#"+seniorsecondary_name+"#"+seniorsecondary_start_year+"#"+seniorsecondary_finish_year+"#"+seniorsecondary_percentage
-        data1=data+"#"+higher_education_name+"#"+higher_education_program+"#"+higher_education_start_year+"#"+higher_education_finish_year+"#"+higher_education_department+"#"+higher_education_percentage
+        data1=""
         query=f"UPDATE usersdata SET eduDetails='{data1}' WHERE username='{username}'"
 
         # insert and commit the changes in the database
@@ -87,9 +73,9 @@ def edu_details():
         connection.commit()
         cursor.close()
         connection.close()
-        return "educational details added."
+        return jsonify({"status": "success"})
 
-    return render_template('edu_details.html',error="none")
+    return render_template('details.html',error="none")
 
 
 ######### method to handle secure logins

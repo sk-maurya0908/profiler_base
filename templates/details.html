@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Details Form</title>
+    <style>
+        body {
+            background-color: #f4f4f4; /* Light gray background */
+            color: #333; /* Dark text color */
+            font-family: 'Arial', sans-serif; /* Font family for better readability */
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            background-color: #3498db; /* Blue background for heading */
+            color: #fff; /* White text color */
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px;
+            background-color: #fff; /* White background for tables */
+        }
+
+        table, th, td {
+            border: 1px solid #ccc; /* Light gray borders */
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        button {
+            background-color: #2ecc71; /* Green color for buttons */
+            color: #fff; /* White text color */
+            padding: 15px;
+            font-size: 16px; /* Larger font size for buttons */
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #27ae60; /* Darker green color on hover */
+        }
+    </style>
+</head>
+<body>
+
+<form action="/details" method="post">
+<h3>BASIC</h3>
+    <table id="basicDetailsTable" name="basicDetailsTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Roll Number</th>
+                <th>Department</th>
+                <th>Program</th>
+                <th>Gender</th>
+            </tr>
+        </thead>
+        
+        <tbody id="basicDetailsBody">
+        </tbody>
+    </table>
+    <br>
+<h3>EDUCATION</h3>
+    <table id="eduDetailsTable" name="eduDetailsTable">
+        <thead>
+            <tr>
+                <th>Examination</th>
+                <th>University </th>
+                <th>Institute  </th>
+                <th>Passing Year</th>
+                <th>Percentage </th>
+            </tr>
+        </thead>
+        
+        <tbody id="eduDetailsBody">
+        </tbody>
+    </table>
+    <button type="button"  onclick="addEduDetails()">Add More</button>
+    <br>
+<h3>WORK EXPERIENCE</h3>
+    <table id="workExperienceDetailsTable" name="workExperienceDetailsTable">
+        <thead>
+            <tr>
+                <th>Designation</th>
+                <th>Organisation</th>
+                <th>Roles & Responsibilities</th>
+                <th>Project</th>
+                <th>Responsibilities in project</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="workExperienceDetailsBody">
+        </tbody>
+    </table>
+    <button type="button" onclick="addWorkDetails()">Add More</button>
+    <br>
+<h3>M.TECH THESIS & SEMINAR</h3>
+    <table id="masterThesisDetailsTable" name="masterThesisDetailsTable">
+        <thead>
+            <tr>
+                <th>Project/Seminar Title</th>
+                <th>Project/Seminar</th>
+                <th>Description</th>
+                <th>Guide</th>
+                <th>Current work</th>
+                <th>Future work</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="masterThesisDetailsBody">
+        </tbody>
+    </table>
+    <button type="button" onclick="addMasterThesisDetails()">Add More</button>
+    <br>
+<h3>COURSE PROJECTS</h3>
+    <table id="courseProjectDetailsTable" name="courseProjectDetailsTable">
+        <thead>
+            <tr>
+                <th>Project Title</th>
+                <th>Course name and code</th>
+                <th>Guide</th>
+                <th>Description</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="courseProjectDetailsBody">
+        </tbody>
+    </table>
+    <button type="button" onclick="addCourseProjectDetails()">Add More</button>
+    <br>
+<h3>CERTIFICATIONS</h3>
+    <table id="certificationsDetailsTable" name="certificationsDetailsTable">
+        <thead>
+            <tr>
+                <th>Certification Title</th>
+                <th>Offered by</th>
+                <th>Platform</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        
+        <tbody id="certificationsDetailsBody">
+        </tbody>
+    </table>
+    <button type="button" onclick="addCertificationsDetails()">Add More</button>
+    <br>
+<h3>ACHIEVEMENTS</h3>
+    <table id="achievementsDetailsTable" name="achievementsDetailsTable">
+        <thead>
+            <tr>
+                <th>Achievements</th>
+            </tr>
+        </thead>
+        
+        <tbody id="achievementsDetailsBody">
+        </tbody>
+    </table>
+    <button type="button" onclick="addAchievementsDetails()">Add More</button>
+    <br>
+<h3>TECHNICAL SKILLS</h3>
+    <table id="technicalSkillsDetailsTable" name="technicalSkillsDetailsTable">
+        <thead>
+            <tr>
+                <th>Your Technical Skills</th>
+            </tr>
+        </thead>
+        
+        <tbody id="technicalSkillsDetailsBody">
+        </tbody>
+    </table>
+    <br>
+<h3>EXTRA-CURRICULARS</h3>
+    <table id="extraCurricularDetailsTable" name="extraCurricularDetailsTable">
+        <thead>
+            <tr>
+                <th>Your Extra Curriculars</th>
+            </tr>
+        </thead>
+        
+        <tbody id="extraCurricularDetailsBody">
+        </tbody>
+    </table>
+    <br>
+<h3>HOBBIES</h3>
+    <table id="hobbiesDetailsTable" name="hobbiesDetailsTable">
+        <thead>
+            <tr>
+                <th>Your Hobbies</th>
+            </tr>
+        </thead>
+        
+        <tbody id="hobbiesDetailsBody">
+        </tbody>
+    </table>
+    <br>
+    <button type="button" onclick="getData()">Submit</button>
+</form>
+    <script type="text/javascript"  src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
