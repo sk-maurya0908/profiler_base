@@ -1,5 +1,33 @@
-from werkzeug.security import generate_password_hash, check_password_hash
-import json
+import hashlib
+import json, subprocess, os
+
+def convert_latex_to_pdf(latex_content, output_path='temp_resume'):
+    # Creating temporary directory
+    temp_dir = os.path.join(os.getcwd(), 'temp_latex')  
+    os.makedirs(temp_dir, exist_ok=True)
+
+    latex_file_path = os.path.join(temp_dir, 'resume.tex')
+    pdf_file_path = os.path.join(temp_dir, 'resume.pdf')
+
+    try:
+        # Write LaTeX content to a file
+        with open(latex_file_path, 'w') as latex_file:
+            latex_file.write(latex_content)
+
+        # Run pdflatex to convert LaTeX to PDF
+        subprocess.run(['pdflatex', '-output-directory', temp_dir, latex_file_path])
+
+        # Move the PDF file to the desired output path
+        os.rename(pdf_file_path, f'{output_path}.pdf')
+
+        # Clean up temporary files and directory
+        os.remove(latex_file_path)
+        os.remove(os.path.join(temp_dir, 'resume.log'))
+    except Exception as e:
+        print(f"Error converting LaTeX to PDF: {e}")
+    finally:
+        # Remove the temporary directory
+        os.rmdir(temp_dir)
 
 
 escapeDict = {'&':'\&', '%':'\%', '$':'\$', '#':'\#', '_':'\_', '{':'\{', '}':'\}', 
@@ -9,17 +37,132 @@ def escape_special_chars(dataString):
     return escapedString
 
 class User:
+    # Database Configuration
+    DB_NAME = "profiler_users_db"
+    DB_USER = "profiler"
+    DB_PASSWORD = "profiler"
+    DB_HOST = "localhost"
+
+    #keys to access various data from the json object
+    # completeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
+    basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
+    educationDataKey=['exam','univ','insti','yop','cpi']
+    workExperienceDataKey=["workDesignation","workOrganisation","workRole","workProject","workProjectResponsibilities","workDate"]
+    masterThesisDataKey=['projectTitle','projectName','projectDescription','projectGuide','projectCurrentWork','projectFutureWork','projectDate']
+    courseProjectDataKey=['courseProjectTitle','courseProjectNameAndCode','courseProjectInstructorName','courseProjectDescription','courseProjectDate']
+    certificationsDataKey=['certificationTitle','certifcationOfferedBy','certificationPlatform','certificationDate']
+    achievementsDataKey=['achievements']
+    technicalSkillsDataKey=['technicalSkills']
+    extraCurricularDataKey=['extraCurricular']
+    hobbiesDataKey=['hobbies']
+
+    ######### method to get the db connection obj
+    def connect_to_db():
+        return psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
+
+    ######### method to insert user's data into database
+    def validate_user(username,password):
+        connection = connect_to_db()  #connecting to DB
+        cursor = connection.cursor()
+        hashed_password=hash_password(password)
+        query=f"SELECT id FROM users WHERE username = '{username}' AND password = '{hashed_password}'"
+        cursor.execute(query)
+        user_id = cursor.fetchone()   #fetching the query results
+        cursor.close()
+        connection.close()               #closing the connection
+
+        if not user_id:
+            return -1
+        return user_id
+
+    ######### method to insert user's data into database
+    def insert_userdata_in_db(user_id,completeUserData):
+        # connecting to database
+        connection=connect_to_db()
+        cursor=connection.cursor()
+
+        # get the basic data 
+        basicData=completeUserData['basicData']
+        # prepare data to be inserted into the table
+        for key in basicDataKey:
+            basicData[key]
+        actualData
+        try:
+            query=f"INSERT INTO usersdata basicData='{data}'"
+            # insert and commit the changes in the database
+            cursor.execute(query)
+            connection.commit()
+        except Exception as e:
+           connection.rollback()  # Rollback the changes if an exception occurs
+           return f"error {e} occured"
+        finally:
+            cursor.close()
+            connection.close()
+        
+            
+        
+    ######### method to insert user's data into database
+    def insert_userdata_in_db(user_id,completeUserData):
+        # connecting to database
+        connection=connect_to_db()
+        cursor=connection.cursor()
+
+        # get the basic data 
+        basicData=completeUserData['basicData']
+        
+        # prepare data to be inserted into the table
+        data="nothing here"
+        ############# ADD MORE HERE #############
+        query=f"INSERT INTO usersdata SET eduDetails='{data1}' WHERE id='{user_id}'"
+
+        # insert and commit the changes in the database
+        cursor.execute(query)
+        connection.commit()
+        cursor.close()
+        connection.close()
+    
+    def registration(username,password):
+        connection=connect_to_db()
+        cursor = connection.cursor()
+        
+        query=f"SELECT user_id FROM users WHERE username = '{username}'"
+        cursor.execute(query)
+        user_exist = cursor.fetchone()   
+
+        #checking if the entered username is available or not
+        if(user_exist): 
+            cursor.close()
+            connection.close()
+            return False
+        else:
+            hashed_password=hash_password(password)
+            #add the username and password into the users table
+            query=f"INSERT INTO users(username,password) VALUES({username},{hashed_password})"
+            cursor.execute(query) #executing query
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+        return True
+
     def __init__(self, username, password, resume):
         self.username = username
-        self.password = generate_password_hash(password, method='sha256')
+        # self.password = hash_password(password)
         self.resume = resume
 
     def update_resume(self, resume):
         self.resume = resume
         #SQl update in database needs to be done
 
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
+    def hash_password(password):
+        # Create a new SHA-256 hash object
+        sha256 = hashlib.sha256()
+
+        # Update the hash object with the password encoded as bytes
+        sha256.update(password.encode('utf-8'))
+
+        # return the hexadecimal representation of the hash
+        return sha256.hexdigest()
 
 
     def generate_latex_resume(self, template_path, mapping_path):
