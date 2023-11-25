@@ -1,33 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-import json, subprocess, os
-
-def convert_latex_to_pdf(latex_content, output_path='temp_resume'):
-    # Creating temporary directory
-    temp_dir = os.path.join(os.getcwd(), 'temp_latex')  
-    os.makedirs(temp_dir, exist_ok=True)
-
-    latex_file_path = os.path.join(temp_dir, 'resume.tex')
-    pdf_file_path = os.path.join(temp_dir, 'resume.pdf')
-
-    try:
-        # Write LaTeX content to a file
-        with open(latex_file_path, 'w') as latex_file:
-            latex_file.write(latex_content)
-
-        # Run pdflatex to convert LaTeX to PDF
-        subprocess.run(['pdflatex', '-output-directory', temp_dir, latex_file_path])
-
-        # Move the PDF file to the desired output path
-        os.rename(pdf_file_path, f'{output_path}.pdf')
-
-        # Clean up temporary files and directory
-        os.remove(latex_file_path)
-        os.remove(os.path.join(temp_dir, 'resume.log'))
-    except Exception as e:
-        print(f"Error converting LaTeX to PDF: {e}")
-    finally:
-        # Remove the temporary directory
-        os.rmdir(temp_dir)
+import json
 
 
 escapeDict = {'&':'\&', '%':'\%', '$':'\$', '#':'\#', '_':'\_', '{':'\{', '}':'\}', 
@@ -42,26 +14,27 @@ class User:
         self.password = generate_password_hash(password, method='sha256')
         self.resume = resume
 
-    def update_resume(self, name, rollNumber, department, program, gender, education, work_experience, skills):
+    def update_resume(self, resume):
         self.resume = resume
         #SQl update in database needs to be done
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+
     def generate_latex_resume(self, template_path, mapping_path):
-        with open('data_mapping.json') as mapping_file:
+        with open(mapping_path) as mapping_file:
             mapping = json.load(mapping_file)
 
-        with open('SWL_RESUME_TEMPLATE.tex') as template_file:
+        with open(template_path) as template_file:
             latex_template = template_file.read()
 
         for key, value in mapping.items():
-            if key not in resume:
+            if key not in self.resume:
                 latex_template = latex_template.replace('%'+key+'STARTS','\\begin{comment}\n%')
                 latex_template = latex_template.replace('%'+key+'ENDS','\end{comment}\n%')
                 continue
-            resData = resume[key]
+            resData = self.resume[key]
             texDataToReplace = ''
             if bool(resData):
                 print(resData)

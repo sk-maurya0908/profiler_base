@@ -8,3 +8,13 @@ work_experience
 education
 course_projects
 certifications
+
+
+
+register
+login
+user insert into db
+download resume -fetch from db
+    if no data found - alert(no data found. please save)
+
+testing tool - selenium used
