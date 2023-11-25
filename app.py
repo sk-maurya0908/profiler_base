@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 import psycopg2
+import json
 
 app = Flask(__name__)  
 app.secret_key = 'your_secret_key'  # Replace 'your_secret_key' with a strong, unique secret key
@@ -11,45 +12,24 @@ DB_USER = "profiler"
 DB_PASSWORD = "profiler"
 DB_HOST = "localhost"
 
+#keys to access various data from the json object
+# completeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
+basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
+educationDataKey=['exam','univ','insti','yop','cpi']
+workExperienceDataKey=["workDesignation","workOrganisation","workRole","workProject","workProjectResponsibilities","workDate"]
+masterThesisDataKey=['projectTitle','projectName','projectDescription','projectGuide','projectCurrentWork','projectFutureWork','projectDate']
+courseProjectDataKey=['courseProjectTitle','courseProjectNameAndCode','courseProjectInstructorName','courseProjectDescription','courseProjectDate']
+certificationsDataKey=['certificationTitle','certifcationOfferedBy','certificationPlatform','certificationDate']
+achievementsDataKey=['achievements']
+technicalSkillsDataKey=['technicalSkills']
+extraCurricularDataKey=['extraCurricular']
+hobbiesDataKey=['hobbies']
+
 ######### method to get the db connection obj
 def connect_to_db():
     return psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
 
-######### method for basic details
-@app.route('/basic_details',methods=['GET','POST'])
-def basic_details():
-    error=None
-    if request.method == 'POST':
-        # connecting to database
-        connection=connect_to_db()
-        cursor=connection.cursor()
-
-        # get the current username 
-        username=session['username']
-
-        # get details from the html form
-        name=request.form['name']
-        roll=request.form['roll']
-        department=request.form['department']
-        program=request.form['program']
-        year=request.form['year']
-
-        # prepare data to be inserted into the table
-        data=name+"#"+roll+"#"+department+"#"+program+"#"+year
-        query=f"INSERT INTO usersdata(username,basicDetails) VALUES('{username}','{data}') ON CONFLICT (username) DO UPDATE SET basicDetails='{data}'"
-
-        # insert and commit the changes in the database
-        cursor.execute(query)
-        connection.commit()
-        cursor.close()
-        connection.close()
-
-        return render_template('details.html',error="none")
-
-    return render_template('basic_details.html',error=error)
-
-
-######### method for educational details
+######### method for getting details
 @app.route('/details',methods=['GET','POST'])
 def details():
     error=None
@@ -58,15 +38,20 @@ def details():
         connection=connect_to_db()
         cursor=connection.cursor()
 
-        # get the current username 
-        username=session['username']
+        # get the current user_id 
+        user_id=session['user_id']
 
-        # get details from the html form
-        data = request.json
-        print("data recieved: ",data)
+        # get details from the html form as JSON object and convert it as Dict
+        completeUserData=request.json['completeData']   
+
+        # get the basic data 
+        basicData=completeUserData['basicData']
+        
+        
         # prepare data to be inserted into the table
-        data1=""
-        query=f"UPDATE usersdata SET eduDetails='{data1}' WHERE username='{username}'"
+        data1="nothing here"
+        ############# ADD MORE HERE #############
+        query=f"INSERT INTO usersdata SET eduDetails='{data1}' WHERE id='{user_id}'"
 
         # insert and commit the changes in the database
         cursor.execute(query)
@@ -83,12 +68,12 @@ def details():
 def login():
     error=None
     if request.method == 'POST':
-        uname=request.form['username']
-        upassword=request.form['password']
+        username=request.form['username']
+        password=request.form['password']
 
         conn = connect_to_db()  #connecting to DB
         cur = conn.cursor()
-        query=f"SELECT id FROM users WHERE username = '{uname}' AND password = '{upassword}'"
+        query=f"SELECT id FROM users WHERE username = '{username}' AND password = '{password}'"
         cur.execute(query)
         user_id = cur.fetchone()   #fetching the query results
         conn.close() #closing the connection
@@ -97,8 +82,8 @@ def login():
             error='Invalid Credentials'
         else:
             # Store the user's username in the session
-            session['username'] = uname
-            return render_template('basic_details.html',error="none")
+            session['user_id'] = user_id
+            return render_template('details.html',error="none")
     return render_template('login.html',error=error)
 
 
@@ -110,10 +95,10 @@ def register():
         conn=connect_to_db()
         cur = conn.cursor()
         #username and password from the form
-        uname=request.form['username']    
+        username=request.form['username']    
         upass=request.form['password']
 
-        cur.execute(f"SELECT id FROM users WHERE username = '{uname}'")
+        cur.execute(f"SELECT id FROM users WHERE username = '{username}'")
         user_exist = cur.fetchone()   
         #checking if the entered username is available or not
         if(user_exist): 
@@ -122,7 +107,7 @@ def register():
             error='password didn\'t match'
         #add the username and password into the users table
         else:
-            cur.execute("INSERT INTO users(username,password) VALUES( %s, %s)", (uname,upass)) #executing query
+            cur.execute("INSERT INTO users(username,password) VALUES( %s, %s)", (username,upass)) #executing query
             conn.commit()
             cur.close()
             conn.close()
@@ -134,9 +119,10 @@ def register():
 ######### method to logout the current user
 @app.route('/logout')  
 def logout():  
-    # Clear the session to log the user out
-    print(session.pop('username', None),"has logged out!")
-    return render_template('index.html')  
+    if request.method == 'POST':
+        # Clear the session to log the user out
+        print(session.pop('user_id', None),"has logged out!")
+        return render_template('index.html')  
 
 
 ######### root method 
@@ -148,3 +134,4 @@ def index():
 if __name__ == '__main__':  
     app.run(debug=True)  
 
+# def updateDB(id,
