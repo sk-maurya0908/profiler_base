@@ -221,7 +221,10 @@
     </table>
     <br>
     <button type="button" onclick="getData()">Save Changes</button>
-    <button id="logoutbutton" onclick="logout()">Logout</button>
+    <form method="GET" action="{{ url_for('download_resume') }}">
+        <button type="submit">Download Resume</button>
+    </form>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
 
 </form>
     <script type="text/javascript"  src="{{ url_for('static', filename='script.js') }}"></script>

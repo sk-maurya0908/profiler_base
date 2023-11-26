@@ -14,7 +14,8 @@ def details():
         # get all details from the html form as JSON object and convert it Dict
         resumeData=request.json['completeData']   
         # get the current user_id 
-        user_id=session['user_id']
+        result=session['user_id']
+        user_id = result[0]
         # print("user_id=session['user_id']*********************************",user_id)
         #insert into db
         user.resumeDataInit(resumeData)
@@ -61,10 +62,10 @@ def register():
             error='password didn\'t match'
         else:
             user=User(username,password)
-            if user.registration():
+            if not user.registration():
                 error = "registration failed"
             else:
-                return render_template('login.html',error="registration successful.")
+                return render_template('login.html',error="registration success.")
 
     return render_template('register.html',error=error)
 
@@ -81,7 +82,7 @@ def logout():
 ######### Route to download the generated PDF resume
 @app.route('/download_resume', methods=['GET'])
 def download_resume():
-    if 'user' in session:
+    if 'username' in session:
         #get user data from database
         # user get the users data from the db
         mapping_path = 'data_mapping.json'
@@ -114,3 +115,31 @@ def index():
 if __name__ == '__main__':  
     app.run(debug=True)  
 
+#####utility functions
+def convert_latex_to_pdf(latex_content, output_path='temp_resume'):
+    # Creating temporary directory
+    temp_dir = os.path.join(os.getcwd(), 'temp_latex')  
+    os.makedirs(temp_dir, exist_ok=True)
+
+    latex_file_path = os.path.join(temp_dir, 'resume.tex')
+    pdf_file_path = os.path.join(temp_dir, 'resume.pdf')
+
+    try:
+        # Write LaTeX content to a file
+        with open(latex_file_path, 'w') as latex_file:
+            latex_file.write(latex_content)
+
+        # Run pdflatex to convert LaTeX to PDF
+        subprocess.run(['pdflatex', '-output-directory', temp_dir, latex_file_path])
+
+        # Move the PDF file to the desired output path
+        os.rename(pdf_file_path, f'{output_path}.pdf')
+
+        # Clean up temporary files and directory
+        os.remove(latex_file_path)
+        os.remove(os.path.join(temp_dir, 'resume.log'))
+    except Exception as e:
+        print(f"Error converting LaTeX to PDF: {e}")
+    finally:
+        # Remove the temporary directory
+        os.rmdir(temp_dir)

@@ -56,8 +56,8 @@ def hash_password(password):
 
 # Database Configuration
 DB_NAME = "profiler_users_db"
-DB_USER = "profiler"
-DB_PASSWORD = "profiler"
+DB_USER = "postgres"
+DB_PASSWORD = "postgres"
 DB_HOST = "localhost"
 
 #keys to access various data from the json object
@@ -82,8 +82,7 @@ class User:
         cursor = connection.cursor()
         query=f"SELECT user_id FROM users WHERE username = '{self.username}' AND password = '{self.password}'"
         cursor.execute(query)
-        result = cursor.fetchone()   #fetching the query results
-        user_id=result[0]
+        user_id = cursor.fetchone()   #fetching the query results
         # print("fe-----------------------tchone*************************",user_id)
         cursor.close()
         connection.close()               #closing the connection
@@ -166,27 +165,39 @@ class User:
         return True
 
     def registration(self):
-        connection=connect_to_db()
-        cursor = connection.cursor()
+        try:
+            connection=connect_to_db()
+            cursor = connection.cursor()
+            
+            query=f"SELECT user_id FROM users WHERE username = '{self.username}'"
+            cursor.execute(query)
+            user_exist = cursor.fetchone()   
 
-        query=f"SELECT user_id FROM users WHERE username = '{self.username}'"
-        cursor.execute(query)
-        user_exist = cursor.fetchone()   
-        #checking if the entered username is available or not
-        if user_exist != 'None': 
-            cursor.close()
-            connection.close()
+            #checking if the entered username is available or not
+            if(user_exist): 
+                cursor.close()
+                connection.close()
+                return False
+            else:
+                hashed_password=hash_password(self.password)
+                #add the username and password into the users table
+                print(self.username, self.password)
+                query=f"INSERT INTO users(username,password) VALUES('{self.username}','{hashed_password}')"
+                cursor.execute(query) #executing query
+                connection.commit()
+                cursor.close()
+                connection.close()
+
+        except Exception as e:
+            # print("error *******************")
+            connection.rollback()  # Rollback the changes if an exception occurs
+            print(f"error {e} occured")
             return False
-        else:
-            hashed_password=hash_password(self.password)
-            #add the username and password into the users table
-            query=f"INSERT INTO users(username,password) VALUES('{self.username}','{hashed_password}')"
-            cursor.execute(query) #executing query
-            connection.commit()
+        finally:
             cursor.close()
             connection.close()
-
         return True
+            
 
     def resumeDataInit(self, resumeData):
         self.resumeData=resumeData
@@ -199,23 +210,23 @@ class User:
     #     self.username = None
     #     self.password = None
 
-    def update_resume(self, name, rollNumber, department, program, gender, education, work_experience, skills):
+    def update_resume(self, resumeData):
         self.resumeData = resumeData
         #SQl update in database needs to be done
 
     def generate_latex_resume(self, template_path, mapping_path):
-        with open('data_mapping.json') as mapping_file:
+        with open(mapping_path) as mapping_file:
             mapping = json.load(mapping_file)
 
-        with open('SWL_RESUME_TEMPLATE.tex') as template_file:
+        with open(template_path) as template_file:
             latex_template = template_file.read()
 
         for key, value in mapping.items():
-            if key not in resumeData:
+            if key not in self.resumeData:
                 latex_template = latex_template.replace('%'+key+'STARTS','\\begin{comment}\n%')
                 latex_template = latex_template.replace('%'+key+'ENDS','\end{comment}\n%')
                 continue
-            resData = resumeData[key]
+            resData = self.resumeData[key]
             texDataToReplace = ''
             if bool(resData):
                 print(resData)
