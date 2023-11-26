@@ -1,4 +1,5 @@
 import hashlib
+import psycopg2
 import json, subprocess, os
 
 def convert_latex_to_pdf(latex_content, output_path='temp_resume'):
@@ -6,8 +7,8 @@ def convert_latex_to_pdf(latex_content, output_path='temp_resume'):
     temp_dir = os.path.join(os.getcwd(), 'temp_latex')  
     os.makedirs(temp_dir, exist_ok=True)
 
-    latex_file_path = os.path.join(temp_dir, 'resume.tex')
-    pdf_file_path = os.path.join(temp_dir, 'resume.pdf')
+    latex_file_path = os.path.join(temp_dir, 'resumeData.tex')
+    pdf_file_path = os.path.join(temp_dir, 'resumeData.pdf')
 
     try:
         # Write LaTeX content to a file
@@ -22,7 +23,7 @@ def convert_latex_to_pdf(latex_content, output_path='temp_resume'):
 
         # Clean up temporary files and directory
         os.remove(latex_file_path)
-        os.remove(os.path.join(temp_dir, 'resume.log'))
+        os.remove(os.path.join(temp_dir, 'resumeData.log'))
     except Exception as e:
         print(f"Error converting LaTeX to PDF: {e}")
     finally:
@@ -36,38 +37,53 @@ def escape_special_chars(dataString):
     escapedString = dataString.translate(str.maketrans(escapeDict))
     return escapedString
 
+######### method to get the db connection obj
+def connect_to_db():
+    return psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
+
+######### method to get the hash of the plain password
+def hash_password(password):
+    return password
+    # Create a new SHA-256 hash object
+    sha256 = hashlib.sha256()
+
+    # Update the hash object with the password encoded as bytes
+    sha256.update(password.encode('utf-8'))
+
+    # return the hexadecimal representation of the hash
+    return sha256.hexdigest()
+
+
+# Database Configuration
+DB_NAME = "profiler_users_db"
+DB_USER = "profiler"
+DB_PASSWORD = "profiler"
+DB_HOST = "localhost"
+
+#keys to access various data from the json object
+# resumeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
+basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
+educationDataKey=['exam','univ','insti','yop','cpi']
+workExperienceDataKey=["workDesignation","workOrganisation","workRole","workProject","workProjectResponsibilities","workDate"]
+masterThesisDataKey=['projectTitle','projectName','projectDescription','projectGuide','projectCurrentWork','projectFutureWork','projectDate']
+courseProjectDataKey=['courseProjectTitle','courseProjectNameAndCode','courseProjectInstructorName','courseProjectDescription','courseProjectDate']
+certificationsDataKey=['certificationTitle','certifcationOfferedBy','certificationPlatform','certificationDate']
+achievementsDataKey=['achievements']
+technicalSkillsDataKey=['technicalSkills']
+extraCurricularDataKey=['extraCurricular']
+hobbiesDataKey=['hobbies']
+
+    
 class User:
-    # Database Configuration
-    DB_NAME = "profiler_users_db"
-    DB_USER = "profiler"
-    DB_PASSWORD = "profiler"
-    DB_HOST = "localhost"
-
-    #keys to access various data from the json object
-    # completeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
-    basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
-    educationDataKey=['exam','univ','insti','yop','cpi']
-    workExperienceDataKey=["workDesignation","workOrganisation","workRole","workProject","workProjectResponsibilities","workDate"]
-    masterThesisDataKey=['projectTitle','projectName','projectDescription','projectGuide','projectCurrentWork','projectFutureWork','projectDate']
-    courseProjectDataKey=['courseProjectTitle','courseProjectNameAndCode','courseProjectInstructorName','courseProjectDescription','courseProjectDate']
-    certificationsDataKey=['certificationTitle','certifcationOfferedBy','certificationPlatform','certificationDate']
-    achievementsDataKey=['achievements']
-    technicalSkillsDataKey=['technicalSkills']
-    extraCurricularDataKey=['extraCurricular']
-    hobbiesDataKey=['hobbies']
-
-    ######### method to get the db connection obj
-    def connect_to_db():
-        return psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
-
     ######### method to insert user's data into database
-    def validate_user(username,password):
+    def validate_user(self):
         connection = connect_to_db()  #connecting to DB
         cursor = connection.cursor()
-        hashed_password=hash_password(password)
-        query=f"SELECT id FROM users WHERE username = '{username}' AND password = '{hashed_password}'"
+        query=f"SELECT user_id FROM users WHERE username = '{self.username}' AND password = '{self.password}'"
         cursor.execute(query)
-        user_id = cursor.fetchone()   #fetching the query results
+        result = cursor.fetchone()   #fetching the query results
+        user_id=result[0]
+        # print("fe-----------------------tchone*************************",user_id)
         cursor.close()
         connection.close()               #closing the connection
 
@@ -76,56 +92,47 @@ class User:
         return user_id
 
     ######### method to insert user's data into database
-    def insert_userdata_in_db(user_id,completeUserData):
+    def insert_userdata_in_db(self, user_id):
         # connecting to database
         connection=connect_to_db()
         cursor=connection.cursor()
 
         # get the basic data 
-        basicData=completeUserData['basicData']
+        basicData=self.resumeData['basicData']
         # prepare data to be inserted into the table
-        for key in basicDataKey:
-            basicData[key]
-        actualData
+        columnName = ','.join([x for x in basicDataKey])
+        data = '\',\''.join([basicData[0][x] for x in basicDataKey])
+        # print(self.resumeData)
         try:
-            query=f"INSERT INTO usersdata basicData='{data}'"
+            # print(user_id)
+            # print(data)
+            query=f"INSERT INTO basicData(user_id,{columnName}) VALUES({user_id},\'{data}\')"
             # insert and commit the changes in the database
             cursor.execute(query)
             connection.commit()
         except Exception as e:
-           connection.rollback()  # Rollback the changes if an exception occurs
-           return f"error {e} occured"
+            # print("error *******************")
+            connection.rollback()  # Rollback the changes if an exception occurs
+            print(f"error {e} occured")
+            return False
         finally:
             cursor.close()
             connection.close()
+        return True
         
-            
-        
-    ######### method to insert user's data into database
-    def insert_userdata_in_db(user_id,completeUserData):
+    ######### method to get user's data from database
+    def get_userdata_from_db(self, user_id):
         # connecting to database
         connection=connect_to_db()
         cursor=connection.cursor()
+        # to be done
+        return True
 
-        # get the basic data 
-        basicData=completeUserData['basicData']
-        
-        # prepare data to be inserted into the table
-        data="nothing here"
-        ############# ADD MORE HERE #############
-        query=f"INSERT INTO usersdata SET eduDetails='{data1}' WHERE id='{user_id}'"
-
-        # insert and commit the changes in the database
-        cursor.execute(query)
-        connection.commit()
-        cursor.close()
-        connection.close()
-    
-    def registration(username,password):
+    def registration(self):
         connection=connect_to_db()
         cursor = connection.cursor()
         
-        query=f"SELECT user_id FROM users WHERE username = '{username}'"
+        query=f"SELECT user_id FROM users WHERE username = '{self.username}'"
         cursor.execute(query)
         user_exist = cursor.fetchone()   
 
@@ -135,9 +142,9 @@ class User:
             connection.close()
             return False
         else:
-            hashed_password=hash_password(password)
+            hashed_password=hash_password(self.password)
             #add the username and password into the users table
-            query=f"INSERT INTO users(username,password) VALUES({username},{hashed_password})"
+            query=f"INSERT INTO users(username,password) VALUES('{self.username}','{hashed_password}')"
             cursor.execute(query) #executing query
             connection.commit()
             cursor.close()
@@ -145,24 +152,20 @@ class User:
 
         return True
 
-    def __init__(self, username, password, resume):
+    def resumeDataInit(self, resumeData):
+        self.resumeData=resumeData
+
+    def __init__(self, username, password):
         self.username = username
-        # self.password = hash_password(password)
-        self.resume = resume
+        self.password = hash_password(password)
+
+    # def __init__(self):
+    #     self.username = None
+    #     self.password = None
 
     def update_resume(self, name, rollNumber, department, program, gender, education, work_experience, skills):
-        self.resume = resume
+        self.resumeData = resumeData
         #SQl update in database needs to be done
-
-    def hash_password(password):
-        # Create a new SHA-256 hash object
-        sha256 = hashlib.sha256()
-
-        # Update the hash object with the password encoded as bytes
-        sha256.update(password.encode('utf-8'))
-
-        # return the hexadecimal representation of the hash
-        return sha256.hexdigest()
 
     def generate_latex_resume(self, template_path, mapping_path):
         with open('data_mapping.json') as mapping_file:
@@ -172,11 +175,11 @@ class User:
             latex_template = template_file.read()
 
         for key, value in mapping.items():
-            if key not in resume:
+            if key not in resumeData:
                 latex_template = latex_template.replace('%'+key+'STARTS','\\begin{comment}\n%')
                 latex_template = latex_template.replace('%'+key+'ENDS','\end{comment}\n%')
                 continue
-            resData = resume[key]
+            resData = resumeData[key]
             texDataToReplace = ''
             if bool(resData):
                 print(resData)
@@ -192,7 +195,7 @@ class User:
                         texDataToReplace += temp_single
                 else:
                     texDataToReplace = escape_special_chars(resData)
-            else:  #empty field - remove from resume
+            else:  #empty field - remove from resumeData
                 latex_template = latex_template.replace('%'+key+'STARTS','\\begin{comment}\n%')
                 latex_template = latex_template.replace('%'+key+'ENDS','\end{comment}\n%')
             mapping[key][1] = texDataToReplace

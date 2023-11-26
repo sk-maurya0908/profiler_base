@@ -26,16 +26,19 @@ hobbiesDataKey=['hobbies']
 
 //creating tables in postgresql
 CREATE TABLE users               (user_id             SERIAL PRIMARY KEY, username           VARCHAR(50)  NOT NULL, password                 VARCHAR(50)  NOT NULL);
-CREATE TABLE basicData           (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), name               VARCHAR(50)  NOT NULL, rollNumber               VARCHAR(50)  NOT NULL, departmentName              VARCHAR(200) NOT NULL, programName VARCHAR(50)  NOT NULL, gender VARCHAR(10) NOT NULL);
-CREATE TABLE educationData       (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), exam               VARCHAR(200) NOT NULL, univ                     VARCHAR(200) NOT NULL, insti                       VARCHAR(200) NOT NULL, yop         VARCHAR(10)  NOT NULL, cpi VARCHAR(10) NOT NULL);
-CREATE TABLE workExperienceData  (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), workDesignation    VARCHAR(100) NOT NULL, workOrganisation         VARCHAR(200) NOT NULL, workRole                    VARCHAR(200) NOT NULL, workProject VARCHAR(100) NOT NULL, workProjectResponsibilities VARCHAR(500) NOT NULL, workDate VARCHAR(50) NOT NULL);
-CREATE TABLE masterThesisData    (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), projectTitle       VARCHAR(150) NOT NULL, projectName              VARCHAR(200) NOT NULL, projectDescription          VARCHAR(1000)NOT NULL, projectGuide VARCHAR(100) NOT NULL,projectCurrentWork VARCHAR(1000) NOT NULL, projectFutureWork VARCHAR(1000) NOT NULL, projectDate VARCHAR(50) NOT NULL);
-CREATE TABLE courseProjectData   (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), courseProjectTitle VARCHAR(150) NOT NULL, courseProjectNameAndCode VARCHAR(200) NOT NULL, courseProjectInstructorName VARCHAR(50)  NOT NULL, courseProjectDescription  VARCHAR(1000) NOT NULL, courseProjectDate VARCHAR(50) NOT NULL);
-CREATE TABLE certificationsData  (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), certificationTitle VARCHAR(150) NOT NULL, certifcationOfferedBy    VARCHAR(200) NOT NULL, certificationPlatform       VARCHAR(100) NOT NULL, certificationDate VARCHAR(50) NOT NULL);
-CREATE TABLE achievementsData    (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), achievements       VARCHAR(1000) NOT NULL);
-CREATE TABLE technicalSkillsData (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), technicalSkills    VARCHAR(1000) NOT NULL);
-CREATE TABLE extraCurricularData (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), extraCurricular    VARCHAR(1000) NOT NULL);
-CREATE TABLE hobbiesData         (id SERIAL PRIMARY KEY user_id INT  REFERENCES users(user_id), hobbies            VARCHAR(1000) NOT NULL);
+CREATE TABLE basicData           (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), name               VARCHAR(50)  NOT NULL, rollNumber               VARCHAR(50)  NOT NULL, departmentName              VARCHAR(200) NOT NULL, programName VARCHAR(50)  NOT NULL, gender VARCHAR(10) NOT NULL);
+CREATE TABLE educationData       (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), exam               VARCHAR(200) NOT NULL, univ                     VARCHAR(200) NOT NULL, insti                       VARCHAR(200) NOT NULL, yop         VARCHAR(10)  NOT NULL, cpi VARCHAR(10) NOT NULL);
+CREATE TABLE workExperienceData  (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), workDesignation    VARCHAR(100) NOT NULL, workOrganisation         VARCHAR(200) NOT NULL, workRole                    VARCHAR(200) NOT NULL, workProject VARCHAR(100) NOT NULL, workProjectResponsibilities VARCHAR(500) NOT NULL, workDate VARCHAR(50) NOT NULL);
+CREATE TABLE masterThesisData    (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), projectTitle       VARCHAR(150) NOT NULL, projectName              VARCHAR(200) NOT NULL, projectDescription          VARCHAR(1000)NOT NULL, projectGuide VARCHAR(100) NOT NULL,projectCurrentWork VARCHAR(1000) NOT NULL, projectFutureWork VARCHAR(1000) NOT NULL, projectDate VARCHAR(50) NOT NULL);
+CREATE TABLE courseProjectData   (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), courseProjectTitle VARCHAR(150) NOT NULL, courseProjectNameAndCode VARCHAR(200) NOT NULL, courseProjectInstructorName VARCHAR(50)  NOT NULL, courseProjectDescription  VARCHAR(1000) NOT NULL, courseProjectDate VARCHAR(50) NOT NULL);
+CREATE TABLE certificationsData  (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), certificationTitle VARCHAR(150) NOT NULL, certifcationOfferedBy    VARCHAR(200) NOT NULL, certificationPlatform       VARCHAR(100) NOT NULL, certificationDate VARCHAR(50) NOT NULL);
+CREATE TABLE achievementsData    (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), achievements       VARCHAR(1000) NOT NULL);
+CREATE TABLE technicalSkillsData (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), technicalSkills    VARCHAR(1000) NOT NULL);
+CREATE TABLE extraCurricularData (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), extraCurricular    VARCHAR(1000) NOT NULL);
+CREATE TABLE hobbiesData         (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), hobbies            VARCHAR(1000) NOT NULL);
+
+GRANT USAGE, SELECT ON sequence basicdata_id_seq TO profiler;
+GRANT SELECT, INSERT ON TABLE basicdata TO profiler;
 
 // table names
 achievementsdata    | table 
