@@ -1,24 +1,26 @@
 #!/usr/bin/python3
 from flask import Flask, render_template, redirect, url_for, request, session
-import subprocess, os
+import json
 from user_management import User
 
 app = Flask(__name__)  
 app.secret_key = 'your_secret_key'  # Replace 'your_secret_key' with a strong, unique secret key
-
+user=User(None,None)
 ######### route for getting details
 @app.route('/details',methods=['GET','POST'])
 def details():
     error=None
     if request.method == 'POST':
         # get all details from the html form as JSON object and convert it Dict
-        completeUserData=request.json['completeData']   
+        resumeData=request.json['completeData']   
         # get the current user_id 
         user_id=session['user_id']
+        # print("user_id=session['user_id']*********************************",user_id)
         #insert into db
-        insert_userdata_in_db(user_id,completeUserData)
+        user.resumeDataInit(resumeData)
+        user.insert_userdata_in_db(user_id)
 
-        return render_template('details.html',error="success")
+        error="success"
 
     return render_template('details.html',error="none")
 
@@ -30,10 +32,14 @@ def login():
     if request.method == 'POST':
         username=request.form['username']
         password=request.form['password']
-
+        #init the user obj
+        user=User(username,password)    
         # validating user's credentials
-        user_id=validate_user(username,password)
-
+        # print("fe--tchone*************************")
+        
+        user_id=user.validate_user()
+        # print("fe-----------------------tchone*************************")
+        
         if user_id == -1:
             error='Invalid Credentials'
         else:
@@ -51,13 +57,14 @@ def register():
         #username and password from the form
         username=request.form['username']    
         password=request.form['password']
-
         if (password != request.form['retypepassword']):
             error='password didn\'t match'
-        elif not registration(username,password):
-            error = "registration failed"
         else:
-            return render_template('login.html',error="registration successful.")
+            user=User(username,password)
+            if user.registration():
+                error = "registration failed"
+            else:
+                return render_template('login.html',error="registration successful.")
 
     return render_template('register.html',error=error)
 
