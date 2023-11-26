@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 from flask import Flask, render_template, redirect, url_for, request, session
-import psycopg2, subprocess, os
-import json
+import subprocess, os
 from user_management import User
 
 app = Flask(__name__)  
@@ -19,7 +18,7 @@ def details():
         #insert into db
         insert_userdata_in_db(user_id,completeUserData)
 
-        return error="success"
+        return render_template('details.html',error="success")
 
     return render_template('details.html',error="none")
 

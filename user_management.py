@@ -1,34 +1,15 @@
 import hashlib
-import json, subprocess, os
+import psycopg2, json
 
-def convert_latex_to_pdf(latex_content, output_path='temp_resume'):
-    # Creating temporary directory
-    temp_dir = os.path.join(os.getcwd(), 'temp_latex')  
-    os.makedirs(temp_dir, exist_ok=True)
+# Database Configuration
+DB_NAME = "profiler_users_db"
+DB_USER = "profiler"
+DB_PASSWORD = "profiler"
+DB_HOST = "localhost"
 
-    latex_file_path = os.path.join(temp_dir, 'resume.tex')
-    pdf_file_path = os.path.join(temp_dir, 'resume.pdf')
-
-    try:
-        # Write LaTeX content to a file
-        with open(latex_file_path, 'w') as latex_file:
-            latex_file.write(latex_content)
-
-        # Run pdflatex to convert LaTeX to PDF
-        subprocess.run(['pdflatex', '-output-directory', temp_dir, latex_file_path])
-
-        # Move the PDF file to the desired output path
-        os.rename(pdf_file_path, f'{output_path}.pdf')
-
-        # Clean up temporary files and directory
-        os.remove(latex_file_path)
-        os.remove(os.path.join(temp_dir, 'resume.log'))
-    except Exception as e:
-        print(f"Error converting LaTeX to PDF: {e}")
-    finally:
-        # Remove the temporary directory
-        os.rmdir(temp_dir)
-
+######### method to get the db connection obj
+def connect_to_db():
+    return psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
 
 escapeDict = {'&':'\&', '%':'\%', '$':'\$', '#':'\#', '_':'\_', '{':'\{', '}':'\}', 
 '~':'\\textasciitilde', '^':'\\textasciicircum', '\\':'\\textbackslash'}
@@ -37,12 +18,6 @@ def escape_special_chars(dataString):
     return escapedString
 
 class User:
-    # Database Configuration
-    DB_NAME = "profiler_users_db"
-    DB_USER = "profiler"
-    DB_PASSWORD = "profiler"
-    DB_HOST = "localhost"
-
     #keys to access various data from the json object
     # completeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
     basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
@@ -55,10 +30,6 @@ class User:
     technicalSkillsDataKey=['technicalSkills']
     extraCurricularDataKey=['extraCurricular']
     hobbiesDataKey=['hobbies']
-
-    ######### method to get the db connection obj
-    def connect_to_db():
-        return psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
 
     ######### method to insert user's data into database
     def validate_user(username,password):
