@@ -14,7 +14,8 @@ def details():
         # get all details from the html form as JSON object and convert it Dict
         resumeData=request.json['completeData']   
         # get the current user_id 
-        user_id=session['user_id']
+        result=session['user_id']
+        user_id = result[0]
         # print("user_id=session['user_id']*********************************",user_id)
         #insert into db
         user.resumeDataInit(resumeData)
@@ -61,10 +62,10 @@ def register():
             error='password didn\'t match'
         else:
             user=User(username,password)
-            if user.registration():
+            if not user.registration():
                 error = "registration failed"
             else:
-                return render_template('login.html',error="registration successful.")
+                return render_template('login.html',error="registration success.")
 
     return render_template('register.html',error=error)
 
