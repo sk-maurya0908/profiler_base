@@ -61,7 +61,7 @@ DB_PASSWORD = "profiler"
 DB_HOST = "localhost"
 
 #keys to access various data from the json object
-# resumeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
+tableNames=['basicData','educationData','workExperienceData','masterThesisData','courseProjectData','certificationsData','achievementsData','technicalSkillsData','extraCurricularData','hobbiesData']
 basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
 educationDataKey=['exam','univ','insti','yop','cpi']
 workExperienceDataKey=["workDesignation","workOrganisation","workRole","workProject","workProjectResponsibilities","workDate"]
@@ -72,6 +72,7 @@ achievementsDataKey=['achievements']
 technicalSkillsDataKey=['technicalSkills']
 extraCurricularDataKey=['extraCurricular']
 hobbiesDataKey=['hobbies']
+resumeDataKey=[basicDataKey,educationDataKey,workExperienceDataKey,masterThesisDataKey,courseProjectDataKey,certificationsDataKey,achievementsDataKey,technicalSkillsDataKey,extraCurricularDataKey,hobbiesDataKey]
 
     
 class User:
@@ -94,30 +95,66 @@ class User:
     ######### method to insert user's data into database
     def insert_userdata_in_db(self, user_id):
         # connecting to database
+
         connection=connect_to_db()
         cursor=connection.cursor()
+        # tableNames=['basicData','educationData',
+        # basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
+        # educationDataKey=['exam','univ','insti','yop','cpi']
 
-        # get the basic data 
-        basicData=self.resumeData['basicData']
-        # prepare data to be inserted into the table
+        # prepare data to be inserted into the DB table
         columnName = ','.join([x for x in basicDataKey])
-        data = '\',\''.join([basicData[0][x] for x in basicDataKey])
-        # print(self.resumeData)
-        try:
-            # print(user_id)
-            # print(data)
-            query=f"INSERT INTO basicData(user_id,{columnName}) VALUES({user_id},\'{data}\')"
-            # insert and commit the changes in the database
-            cursor.execute(query)
-            connection.commit()
-        except Exception as e:
-            # print("error *******************")
-            connection.rollback()  # Rollback the changes if an exception occurs
-            print(f"error {e} occured")
-            return False
-        finally:
-            cursor.close()
-            connection.close()
+        tableDataList=self.resumeData['basicData'] #get the list of all the data in the table
+        for itemNumber in range(len(tableDataList)):
+            data = '\',\''.join([tableDataList[itemNumber][x] for x in basicDataKey])
+            try:
+                print(data)
+                query=f"INSERT INTO basicData(user_id,{columnName}) VALUES({user_id},\'{data}\')"
+                # insert and commit the changes in the database
+                cursor.execute(query)
+                connection.commit()
+            except Exception as e:
+                connection.rollback()  # Rollback the changes if an exception occurs
+                print(f"error {e} occured")
+                return False
+
+        columnName = ','.join([x for x in educationDataKey])
+        tableDataList=self.resumeData['educationData'] #get the list of all the data in the table
+        for itemNumber in range(len(tableDataList)):
+            data = '\',\''.join([tableDataList[itemNumber][x] for x in educationDataKey])
+            try:
+                print(data)
+                query=f"INSERT INTO basicData(user_id,{columnName}) VALUES({user_id},\'{data}\')"
+                # insert and commit the changes in the database
+                cursor.execute(query)
+                connection.commit()
+            except Exception as e:
+                connection.rollback()  # Rollback the changes if an exception occurs
+                print(f"error {e} occured")
+                return False
+
+        # for tableName in tableNames:    #iterate for every table 
+        #     # get the table data 
+        #     tableDataList=self.resumeData[tableName] #get the list of all the data in the table
+        #     # prepare data to be inserted into the DB table
+        #     columnName = ','.join([x for x in tableDataList])
+        #     for itemNumber in range(len(tableDataList)):
+        #         data = '\',\''.join([tableDataList[itemNumber][x] for x in resumeDataKey[itemNumber]])
+        #         # print(self.resumeData)
+        #         try:
+        #             # print(user_id)
+        #             # print(data)
+        #             query=f"INSERT INTO {tableName}(user_id,{columnName}) VALUES({user_id},\'{data}\')"
+        #             # insert and commit the changes in the database
+        #             cursor.execute(query)
+        #             connection.commit()
+        #         except Exception as e:
+        #             # print("error *******************")
+        #             connection.rollback()  # Rollback the changes if an exception occurs
+        #             print(f"error {e} occured")
+        #             return False
+        cursor.close()
+        connection.close()
         return True
         
     ######### method to get user's data from database
@@ -131,13 +168,12 @@ class User:
     def registration(self):
         connection=connect_to_db()
         cursor = connection.cursor()
-        
+
         query=f"SELECT user_id FROM users WHERE username = '{self.username}'"
         cursor.execute(query)
         user_exist = cursor.fetchone()   
-
         #checking if the entered username is available or not
-        if(user_exist): 
+        if user_exist != 'None': 
             cursor.close()
             connection.close()
             return False

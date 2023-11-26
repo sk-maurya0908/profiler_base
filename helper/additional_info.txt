@@ -1,5 +1,5 @@
 //keys for tables
-completeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
+resumeDataKey=['basicDataKey','educationDataKey','workExperienceDataKey','masterThesisDataKey','courseProjectDataKey','certificationsDataKey','achievementsDataKey','technicalSkillsDataKey','extraCurricularDataKey','hobbiesDataKey']
 basicDataKey=['name', 'rollNumber', 'departmentName', 'programName', 'gender']
 educationDataKey=['exam','univ','insti','yop','cpi']
 workExperienceDataKey=["workDesignation","workOrganisation","workRole","workProject","workProjectResponsibilities","workDate"]
@@ -38,7 +38,18 @@ CREATE TABLE extraCurricularData (id SERIAL PRIMARY KEY, user_id INT  REFERENCES
 CREATE TABLE hobbiesData         (id SERIAL PRIMARY KEY, user_id INT  REFERENCES users(user_id), hobbies            VARCHAR(1000) NOT NULL);
 
 GRANT USAGE, SELECT ON sequence basicdata_id_seq TO profiler;
-GRANT SELECT, INSERT ON TABLE basicdata TO profiler;
+
+GRANT SELECT,INSERT ON TABLE achievementsdata TO profiler;
+GRANT SELECT,INSERT ON TABLE basicdata TO profiler;
+GRANT SELECT,INSERT ON TABLE certificationsdata TO profiler;
+GRANT SELECT,INSERT ON TABLE courseprojectdata TO profiler;
+GRANT SELECT,INSERT ON TABLE educationdata TO profiler;
+GRANT SELECT,INSERT ON TABLE extracurriculardata TO profiler;
+GRANT SELECT,INSERT ON TABLE hobbiesdata TO profiler;
+GRANT SELECT,INSERT ON TABLE masterthesisdata TO profiler;
+GRANT SELECT,INSERT ON TABLE technicalskillsdata TO profiler;
+GRANT SELECT,INSERT ON TABLE users TO profiler;
+GRANT SELECT,INSERT ON TABLE workexperiencedata TO profiler;
 
 // table names
 achievementsdata    | table 
