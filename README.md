@@ -1,5 +1,5 @@
 # Profiler_base
-An automated resume generator that outputs into the IIT Bombay resume format.
+An automated resume generator that creates resume of IIT Bombay format as a pdf file.
 
 ## Setting the `postgresql`
 ### Installation
